@@ -3,7 +3,7 @@ package next.optional;
 public class User {
     private String name;
     private Integer age;
-    
+
     public User(String name, Integer age) {
         this.name = name;
         this.age = age;
@@ -65,5 +65,13 @@ public class User {
         } else if (!name.equals(other.name))
             return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
     }
 }

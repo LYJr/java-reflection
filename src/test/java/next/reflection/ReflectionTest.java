@@ -1,10 +1,9 @@
 package next.reflection;
 
-import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 
+import next.optional.User;
+import next.student.Student;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,5 +49,43 @@ public class ReflectionTest {
                 logger.debug("param type : {}", paramType);
             }
         }
+    }
+
+    @Test
+    public void privateFieldAccess() throws IllegalAccessException {
+        Class<Student> clazz = Student.class;
+        logger.debug(clazz.getName());
+
+        Field[] fields= clazz.getDeclaredFields();
+        Student s = new Student();
+        for (Field field : fields) {
+            field.setAccessible(true);
+
+            if(field.getType() == String.class) {
+                field.set(s, "댕냥");
+            }
+            if(field.getType() == int.class) {
+                field.set(s, 30);
+            }
+        }
+        logger.debug("학생 : {}", s);
+    }
+
+    @Test
+    public void createUser () throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        Class<User> clazz = User.class;
+
+        Constructor[] c =clazz.getDeclaredConstructors();
+
+        User user = null;
+        for (Constructor constructor : c) {
+            if(constructor.getParameterCount() == 2) {
+                Type[] a = constructor.getParameterTypes();
+                if(a[0].equals(String.class) && a[1].equals(Integer.class)) {
+                    user = (User)constructor.newInstance("댕냥", 30);
+                }
+            }
+        }
+        logger.debug("유저 : {}", user);
     }
 }
